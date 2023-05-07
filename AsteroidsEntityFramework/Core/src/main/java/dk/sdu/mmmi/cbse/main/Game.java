@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import dk.sdu.mmmi.cbse.bulletsystem.BulletControlSystem;
+import dk.sdu.mmmi.cbse.bulletsystem.BulletPlugin;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -42,18 +44,22 @@ public class Game implements ApplicationListener {
 
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData)
         );
-
+        
+        IGamePluginService bulletPlugin = new BulletPlugin();
         IGamePluginService playerPlugin = new PlayerPlugin();
         IGamePluginService enemyPlugin = new EnemyPlugin();
 
+        IEntityProcessingService bulletProcess = new BulletControlSystem();
         IEntityProcessingService playerProcess = new PlayerControlSystem();
         IEntityProcessingService enemyProcess = new EnemyControlSystem();
 
         entityPlugins.add(playerPlugin);
-        entityProcessors.add(playerProcess);
-
         entityPlugins.add(enemyPlugin);
+        entityPlugins.add(bulletPlugin);
+
+        entityProcessors.add(playerProcess);
         entityProcessors.add(enemyProcess);
+        entityProcessors.add(bulletProcess);
 
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : entityPlugins) {
