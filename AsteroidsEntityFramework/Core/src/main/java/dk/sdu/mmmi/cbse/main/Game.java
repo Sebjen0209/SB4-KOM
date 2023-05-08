@@ -16,12 +16,14 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.util.SPILocator;
 import dk.sdu.mmmi.cbse.enemysystem.EnemyControlSystem;
 import dk.sdu.mmmi.cbse.enemysystem.EnemyPlugin;
 import dk.sdu.mmmi.cbse.managers.GameInputProcessor;
 import dk.sdu.mmmi.cbse.playersystem.PlayerControlSystem;
 import dk.sdu.mmmi.cbse.playersystem.PlayerPlugin;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Game implements ApplicationListener {
@@ -48,37 +50,13 @@ public class Game implements ApplicationListener {
 
         sr = new ShapeRenderer();
 
-        Gdx.input.setInputProcessor(new GameInputProcessor(gameData)
-        );
+        Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
 
         //det her er games lap - start
-        IGamePluginService playerPlugin = new PlayerPlugin();
-        IGamePluginService enemyPlugin = new EnemyPlugin();
-        IGamePluginService asteroidPlugin = new AsteroidPlugin();
-        IGamePluginService bulletPlugin = new BulletPlugin();
-
-        IPostEntityProcessingService collision = new CollisionDetector();
-
-        IEntityProcessingService playerProcess = new PlayerControlSystem();
-        IEntityProcessingService enemyProcess = new EnemyControlSystem();
-        IEntityProcessingService asteroidProcess = new AsteroidProcessor();
-        IEntityProcessingService bulletProcess = new BulletControlSystem();
-
-        entityPlugins.add(asteroidPlugin);
-        entityPlugins.add(playerPlugin);
-        entityPlugins.add(enemyPlugin);
-        entityPlugins.add(bulletPlugin);
-
-        postMan.add(collision);
-        
-        entityProcessors.add(asteroidProcess);
-        entityProcessors.add(playerProcess);
-        entityProcessors.add(enemyProcess);
-        entityProcessors.add(bulletProcess);
         //det her er games lap - slut
 
         // Lookup all Game Plugins using ServiceLoader
-        for (IGamePluginService iGamePlugin : entityPlugins) {
+        for (IGamePluginService iGamePlugin : getPluginServices()) {
             iGamePlugin.start(gameData, world);
         }
     }
@@ -101,10 +79,10 @@ public class Game implements ApplicationListener {
 
     private void update() {
         // Update
-        for (IEntityProcessingService entityProcessorService : entityProcessors) {
+        for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }
-        for (IPostEntityProcessingService postEntityProcessingService : postMan) {
+        for (IPostEntityProcessingService postEntityProcessingService : getPostEntityProcessingServices()) {
             postEntityProcessingService.process(gameData,world);
         }
     }
@@ -144,5 +122,16 @@ public class Game implements ApplicationListener {
 
     @Override
     public void dispose() {
+    }
+    private Collection<? extends IGamePluginService> getPluginServices() {
+        return SPILocator.locateAll(IGamePluginService.class);
+    }
+
+    private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
+        return SPILocator.locateAll(IEntityProcessingService.class);
+    }
+
+    private Collection<? extends IPostEntityProcessingService> getPostEntityProcessingServices() {
+        return SPILocator.locateAll(IPostEntityProcessingService.class);
     }
 }
