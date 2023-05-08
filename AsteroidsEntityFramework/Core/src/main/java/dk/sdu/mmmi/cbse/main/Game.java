@@ -7,11 +7,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.mmmi.cbse.asteroid.AsteroidPlugin;
 import dk.sdu.mmmi.cbse.asteroid.AsteroidProcessor;
+import dk.sdu.mmmi.cbse.bulletsystem.BulletControlSystem;
+import dk.sdu.mmmi.cbse.bulletsystem.BulletPlugin;
+import dk.sdu.mmmi.cbse.collisionsystem.CollisionDetector;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
+import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.mmmi.cbse.enemysystem.EnemyControlSystem;
 import dk.sdu.mmmi.cbse.enemysystem.EnemyPlugin;
 import dk.sdu.mmmi.cbse.managers.GameInputProcessor;
@@ -28,6 +32,8 @@ public class Game implements ApplicationListener {
     private final GameData gameData = new GameData();
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     private List<IGamePluginService> entityPlugins = new ArrayList<>();
+
+    private List<IPostEntityProcessingService> postMan = new ArrayList<>();
     private World world = new World();
 
     @Override
@@ -45,22 +51,31 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData)
         );
 
+        //det her er games lap - start
         IGamePluginService playerPlugin = new PlayerPlugin();
         IGamePluginService enemyPlugin = new EnemyPlugin();
         IGamePluginService asteroidPlugin = new AsteroidPlugin();
+        IGamePluginService bulletPlugin = new BulletPlugin();
+
+        IPostEntityProcessingService collision = new CollisionDetector();
 
         IEntityProcessingService playerProcess = new PlayerControlSystem();
         IEntityProcessingService enemyProcess = new EnemyControlSystem();
         IEntityProcessingService asteroidProcess = new AsteroidProcessor();
-
-        entityPlugins.add(playerPlugin);
-        entityProcessors.add(playerProcess);
+        IEntityProcessingService bulletProcess = new BulletControlSystem();
 
         entityPlugins.add(asteroidPlugin);
-        entityProcessors.add(asteroidProcess);
-
+        entityPlugins.add(playerPlugin);
         entityPlugins.add(enemyPlugin);
+        entityPlugins.add(bulletPlugin);
+
+        postMan.add(collision);
+        
+        entityProcessors.add(asteroidProcess);
+        entityProcessors.add(playerProcess);
         entityProcessors.add(enemyProcess);
+        entityProcessors.add(bulletProcess);
+        //det her er games lap - slut
 
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : entityPlugins) {
@@ -88,6 +103,9 @@ public class Game implements ApplicationListener {
         // Update
         for (IEntityProcessingService entityProcessorService : entityProcessors) {
             entityProcessorService.process(gameData, world);
+        }
+        for (IPostEntityProcessingService postEntityProcessingService : postMan) {
+            postEntityProcessingService.process(gameData,world);
         }
     }
 

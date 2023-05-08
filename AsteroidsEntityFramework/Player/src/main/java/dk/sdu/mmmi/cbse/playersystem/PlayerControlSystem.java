@@ -1,5 +1,6 @@
 package dk.sdu.mmmi.cbse.playersystem;
 
+import dk.sdu.mmmi.cbse.bulletsystem.BulletControlSystem;
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
@@ -24,6 +25,8 @@ import static java.lang.Math.sqrt;
  */
 public class PlayerControlSystem implements IEntityProcessingService {
 
+    private BulletControlSystem bulletSystem = new BulletControlSystem();
+
     @Override
     public void process(GameData gameData, World world) {
 
@@ -35,11 +38,10 @@ public class PlayerControlSystem implements IEntityProcessingService {
             movingPart.setRight(gameData.getKeys().isDown(RIGHT));
             movingPart.setUp(gameData.getKeys().isDown(UP));
 
+            //det her er nono, indtil videre
             if (gameData.getKeys().isDown(GameKeys.SPACE)){
                 System.out.println("SPACE");
-                for (BulletSPI bullet : SPILocator.locateAll(BulletSPI.class)){
-                    world.addEntity(bullet.createBullet(player,gameData));
-                }
+                    world.addEntity(bulletSystem.createBullet(player,gameData));
             }
             
             movingPart.process(gameData, player);

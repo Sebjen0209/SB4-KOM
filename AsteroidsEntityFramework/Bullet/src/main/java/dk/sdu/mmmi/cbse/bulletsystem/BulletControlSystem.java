@@ -14,11 +14,10 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-public class BulletControlSystem implements IEntityProcessingService, BulletSPI {
+public class BulletControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-
         for (Entity bullet : world.getEntities(Bullet.class)) {
             PositionPart positionPart = bullet.getPart(PositionPart.class);
             MovingPart movingPart = bullet.getPart(MovingPart.class);
@@ -35,7 +34,6 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         }
     }
 
-    @Override
     public Entity createBullet(Entity shooter, GameData gameData) {
         PositionPart shooterPos = shooter.getPart(PositionPart.class);
 
