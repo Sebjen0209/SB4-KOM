@@ -10,6 +10,10 @@
     </parent>
 
     <artifactId>Asteroid</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>CommonEnemy</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
