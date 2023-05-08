@@ -9,11 +9,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>org.example</groupId>
     <artifactId>Asteroid</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>CommonEnemy</module>
-    </modules>
 
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
@@ -24,12 +21,6 @@
         <dependency>
             <groupId>dk.sdu.mmmi.cbse</groupId>
             <artifactId>Common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>dk.sdu.mmmi.cbse</groupId>
-            <artifactId>CommonAsteroid</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
