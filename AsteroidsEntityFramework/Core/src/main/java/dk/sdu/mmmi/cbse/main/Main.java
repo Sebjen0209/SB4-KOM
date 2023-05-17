@@ -3,6 +3,7 @@ package dk.sdu.mmmi.cbse.main;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Main {
 	
@@ -18,7 +19,7 @@ public class Main {
 		application.scan("dk.sdu.mmmi.cbse.main");
 		application.refresh();
 
-		new Lwjgl3Application((ApplicationListener) application.getBean("game"), cfg);
+		new Lwjgl3Application((ApplicationListener) application.getBean("game"), config);
 	}
 	
 }
