@@ -14,6 +14,8 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.util.SPILocator;
 
+import java.util.ServiceLoader;
+
 /**
  *
  * @author jcs
@@ -34,7 +36,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             //det her er nono, indtil videre
             if (gameData.getKeys().isDown(GameKeys.SPACE)) {
-                for (BulletSPI bullet : SPILocator.locateAll(BulletSPI.class)) {
+                for (BulletSPI bullet : ServiceLoader.load(BulletSPI.class)) {
                     world.addEntity(bullet.createBullet(player, gameData));
                 }
             }

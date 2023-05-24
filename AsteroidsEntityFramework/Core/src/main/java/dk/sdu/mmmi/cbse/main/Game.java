@@ -28,7 +28,6 @@ public class Game implements ApplicationListener {
     private final GameData gameData = new GameData();
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     private List<IGamePluginService> entityPlugins = new ArrayList<>();
-
     private List<IPostEntityProcessingService> postMan = new ArrayList<>();
     private World world = new World();
 
