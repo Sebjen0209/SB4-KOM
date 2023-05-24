@@ -16,10 +16,7 @@ import dk.sdu.mmmi.cbse.common.util.SPILocator;
 
 import java.util.ServiceLoader;
 
-/**
- *
- * @author jcs
- */
+
 public class PlayerControlSystem implements IEntityProcessingService {
 
 
