@@ -116,9 +116,7 @@ public class Game implements ApplicationListener {
     @Override
     public void dispose() {
     }
-    private Collection<? extends IGamePluginService> getPluginServices() {
-        return SPILocator.locateAll(IGamePluginService.class);
-    }
+
 
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
         return SPILocator.locateAll(IEntityProcessingService.class);

@@ -18,8 +18,7 @@ import static java.lang.Math.sqrt;
  *
  * @author Alexander
  */
-public class MovingPart
-        implements EntityPart {
+public class MovingPart implements EntityPart {
 
     private float dx, dy;
     private float deceleration, acceleration;
